@@ -1,6 +1,6 @@
 # Todo
 
-Official freestyle football community governance app (part of FSMeet).
+Task manager board. Uses FSMeet as a user base.
 
 ## Stack
 

@@ -35,19 +35,15 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        AUTH_URL: http://localhost:3003
-        FSMEET_API_URL: https://api.dev.fsmeet.dffb.org
-        FSMEET_FRONTEND_URL: https://dev.fsmeet.dffb.org
-        BUILD_TIME: local
+        NEXT_PUBLIC_SITE_URL: http://localhost:3003
+        FSMEET_API_URL: https://api.dev.fsmeet.dffb.org/v1
+        NODE_ENV: development
     ports:
       - '3003:3003'
     environment:
-      AUTH_URL: http://localhost:3003
+      NODE_ENV: development
       NEXT_PUBLIC_SITE_URL: http://localhost:3003
-      FSMEET_API_URL: https://api.dev.fsmeet.dffb.org
-      NEXT_PUBLIC_FSMEET_API_URL: https://api.dev.fsmeet.dffb.org/v1
-      FSMEET_FRONTEND_URL: https://dev.fsmeet.dffb.org
-      NEXT_PUBLIC_FSMEET_FRONTEND_URL: https://dev.fsmeet.dffb.org
+      FSMEET_API_URL: https://api.dev.fsmeet.dffb.org/v1
       DATABASE_URL: mysql://todo:password@mysql:3308/todo
       AUTH_SESSION_SECRET: ${AUTH_SESSION_SECRET:-dev-change-me}
       FSMEET_OAUTH_CLIENT_ID: ${FSMEET_OAUTH_CLIENT_ID:-todo}

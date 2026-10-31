@@ -18,6 +18,7 @@ jobs:
       TAGS: nilsfs7/fsmeet-todo:dev
       NEXT_PUBLIC_SITE_URL: https://dev.todo.fsmeet.dffb.org
       FSMEET_API_URL: https://api.dev.fsmeet.dffb.org/v1
+      NODE_ENV: development
     steps:
       - name: Set environment by branch
         id: build-args
@@ -27,6 +28,7 @@ jobs:
               echo "TAGS=nilsfs7/fsmeet-todo:latest,nilsfs7/fsmeet-todo:prod" >> "$GITHUB_ENV"
               echo "NEXT_PUBLIC_SITE_URL=https://todo.fsmeet.com" >> "$GITHUB_ENV"
               echo "FSMEET_API_URL=https://api.fsmeet.dffb.org/v1" >> "$GITHUB_ENV"
+              echo "NODE_ENV=production" >> "$GITHUB_ENV"
           fi
         
       - name: Set up QEMU
@@ -51,3 +53,4 @@ jobs:
           build-args: |
             NEXT_PUBLIC_SITE_URL=${{ env.NEXT_PUBLIC_SITE_URL }}
             FSMEET_API_URL=${{ env.FSMEET_API_URL }}
+            NODE_ENV=${{ env.NODE_ENV }}
