@@ -1,0 +1,60 @@
+services:
+  mysql:
+    image: mariadb:12.1.2
+    container_name: todo-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: password
+    ports:
+      - '3308:3306'
+    volumes:
+      - todo_mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  adminer:
+    image: adminer:6.2.0
+    container_name: todo-adminer
+    restart: unless-stopped
+    ports:
+      - '7080:8080'
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AUTH_URL: http://localhost:3003
+        BACKEND_URL_FSMEET: https://api.dev.fsmeet.dffb.org
+        FRONTEND_URL_FSMEET: https://dev.fsmeet.dffb.org
+        BUILD_TIME: local
+    ports:
+      - '3003:3003'
+    environment:
+      AUTH_URL: http://localhost:3003
+      NEXT_PUBLIC_SITE_URL: http://localhost:3003
+      BACKEND_URL_FSMEET: https://api.dev.fsmeet.dffb.org
+      NEXT_PUBLIC_FSMEET_API_URL: https://api.dev.fsmeet.dffb.org/v1
+      FRONTEND_URL_FSMEET: https://dev.fsmeet.dffb.org
+      NEXT_PUBLIC_FSMEET_FRONTEND_URL: https://dev.fsmeet.dffb.org
+      DATABASE_URL: mysql://todo:password@mysql:3308/todo
+      AUTH_SESSION_SECRET: ${AUTH_SESSION_SECRET:-dev-change-me}
+      FSMEET_OAUTH_CLIENT_ID: ${FSMEET_OAUTH_CLIENT_ID:-todo}
+      FSMEET_OAUTH_CLIENT_SECRET: ${FSMEET_OAUTH_CLIENT_SECRET:-}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  todo_mariadb_data:
