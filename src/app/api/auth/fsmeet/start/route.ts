@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { buildAuthorizeUrl, createPkce, isOAuthConfigured } from "@/lib/oauth";
 import { setOAuthPendingCookie } from "@/lib/session";
-import { sanitizeReturnTo } from "@/lib/site";
+import { publicOrigin, sanitizeReturnTo } from "@/lib/site";
 
 export async function GET(request: Request) {
   if (!isOAuthConfigured()) {
-    return NextResponse.redirect(new URL("/login?error=config", request.url));
+    return NextResponse.redirect(new URL("/login?error=config", publicOrigin(request)));
   }
 
   const url = new URL(request.url);
